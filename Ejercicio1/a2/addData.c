@@ -31,6 +31,10 @@ int agregarInicio(const char *nombre, const void *data, int size)
                 return ERR_AL_CRE;
             }
         }
+        else
+        {
+            return ERR_AL_UNKOWN;
+        }
     }
     
     char auxBuf[N];
@@ -47,7 +51,11 @@ int agregarInicio(const char *nombre, const void *data, int size)
     {
         return ERR_AL_WT;
     }
-    write(fd, auxBuf, auxRead);
+    
+    if(write(fd, auxBuf, auxRead))
+    {
+        return ERR_AL_WT;
+    }
     
     if(close(fd) < 0)
     {
@@ -61,12 +69,8 @@ int agregarInicio(const char *nombre, const void *data, int size)
 #define ERROR 0
 
 int checkParam(const char *nombre, const void *data, int size)
-{
-    const char *checkName = ".txt";
-
-    char *isText = strstr(nombre, checkName);
-    
-    if(!isText){fprintf(stderr, "Error de parametros: falta extension de texto\n"); return ERROR;}
+{ 
+    if(!nombre){fprintf(stderr, "Error de parametros: parametro nombre es NULL\n"); return ERROR;}
 
     if(!data){fprintf(stderr, "Error de parametros: parametro data es NULL\n"); return ERROR;}
 
